@@ -137,6 +137,7 @@ class ArticlePage(Page):
     api_fields = [
         APIField("title"),
         APIField("slug"),
+        APIField("author"),
         APIField("body"),  # not rendered to plain html
         APIField("custom_title", serializer=serializers.CharField(source="get_title")),
         # APIField(
