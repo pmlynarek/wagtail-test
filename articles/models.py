@@ -1,3 +1,4 @@
+from wagtail.core.fields import RichTextField
 from modelcluster.fields import ParentalKey
 
 from wagtail.contrib.routable_page.models import route
@@ -36,17 +37,23 @@ class Author(models.Model):
     avatar = models.ForeignKey(
         Image, on_delete=models.PROTECT, related_name="+", verbose_name=_("Avatar")
     )
+    description = RichTextField(_("Description"), features=["ul"])
 
     api_fields = [
         APIField("name"),
         APIField("avatar"),
+        APIField("description"),
         APIField(
             "avatar_thumbnail",
             serializer=ImageRenditionField("fill-30x30", source="avatar"),
         ),
     ]
 
-    panels = [FieldPanel("name"), ImageChooserPanel("avatar")]
+    panels = [
+        FieldPanel("name"),
+        FieldPanel("description"),
+        ImageChooserPanel("avatar"),
+    ]
 
     def __str__(self):
         return self.name
@@ -139,7 +146,9 @@ class ArticlePage(Page):
         APIField("slug"),
         APIField("author"),
         APIField("body"),  # not rendered to plain html
-        APIField("custom_title", serializer=serializers.CharField(source="get_title")),
+        APIField(
+            "custom_title", serializer=serializers.CharField(source="get_title")
+        ),  # watch out for additional queries to database here - prefetch by default doesn't work
         # APIField(
         #     "videos",
         #     serializer=VideoSerializer(many=True, source="original_post_videos"),

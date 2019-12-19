@@ -44,6 +44,10 @@ INSTALLED_APPS = [
     "wagtail.contrib.routable_page",
     "modelcluster",
     "taggit",
+    "django_filters",
+    "rest_framework",
+    "rest_framework.authtoken",
+    "django_extensions",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -171,3 +175,13 @@ WAGTAILSEARCH_BACKENDS = {
 # WAGTAILADMIN_RICH_TEXT_EDITORS = {
 #     "default": {"WIDGET": "wagtail.admin.rich_text.HalloRichTextArea"}
 # }
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication"
+    ]
+}
+
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"]
+}

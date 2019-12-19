@@ -1,3 +1,8 @@
+import wagtail.admin.rich_text.editors.draftail.features as draftail_features
+from wagtail.admin.rich_text.converters.html_to_contentstate import (
+    InlineStyleElementHandler,
+)
+from wagtail.core import hooks
 from django.utils.translation import gettext as _
 from wagtail.contrib.modeladmin.options import (
     ModelAdmin,
@@ -35,3 +40,26 @@ class ArticlesGroup(ModelAdminGroup):
 
 
 modeladmin_register(ArticlesGroup)
+
+
+@hooks.register("register_rich_text_features")
+def register_underline_feature(features):
+    feature_name = "underline"
+    type_ = "UNDERLINE"
+
+    control = {"type": type_, "label": "U", "description": "underline"}
+
+    features.register_editor_plugin(
+        "draftail", feature_name, draftail_features.InlineStyleFeature(control)
+    )
+
+    db_conversion = {
+        "from_database_format": {
+            'span[style="text-decoration: underline"]': InlineStyleElementHandler(type_)
+        },
+        "to_database_format": {
+            "style_map": {type_: 'span style="text-decoration: underline"'}
+        },
+    }
+
+    features.register_converter_rule("contentstate", feature_name, db_conversion)
