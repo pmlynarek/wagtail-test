@@ -3,7 +3,7 @@ Django==2.2.4
 psycopg2-binary==2.8.3
 elasticsearch==6.3.0
 
-wagtail==2.7
+wagtail==2.11.8
 wagtail-autocomplete==0.3.1
 djangorestframework==3.10.3
 django-filter==2.2.0
